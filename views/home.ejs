@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html class=''>
+
+<head>
+    <link rel="stylesheet" href="<%= rootpath %>/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<%= rootpath %>/assets/css/style.css">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+
+    <script src="<%= rootpath %>/assets/js/jquery.min.js"></script>
+    <script src="<%= rootpath %>/assets/js/bootstrap.min.js"></script>
+    <script defer src="<%= rootpath %>/node_modules/socket.io-client/dist/socket.io.js"></script>
+</head>
+
+<body>
+    <div id="frame">
+        <div id="sidepanel">
+            <div id="profile">
+                <div class="wrap">
+                    <img id="profile-img" src="<%= rootpath %>/assets/img/faculty-user.png" class="<%= faculty.status%>" alt="" />
+                    <p class="profile-name"><%= faculty.faculty_name %></p>
+                    <input type="hidden" name="rootpath" id="rootpath" value="<%= rootpath %>">
+                </div>
+            </div>
+            <div id="search">
+                <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
+                <input type="text" id="contact-search" placeholder="Search contacts..." />
+            </div>
+            <div id="contacts" class="scrollbar1">
+                <ul class="scrollbar2">
+                    <% learner.forEach(function(row){ %>
+                    <li class="contact" onclick="users('<%=row.lr_id%>','<%=faculty.faculty_id%>')">
+                        <div class="wrap">
+                            <span class="contact-status <%= row.status %>"></span>
+                            <img src="<%= rootpath %>/assets/img/user.png" alt="" />
+                            <div class="meta">
+                                <p id="name<%= row.lr_id %>" class="name"><%= row.lr_name %></p>
+                                <p class="preview"><%= row.status %></p>
+                            </div>
+                        </div>
+                    </li>
+                    <% }) %>
+                </ul>
+            </div>
+            <div id="bottom-bar">
+                <button id="groupchat" class="user-active"><i class="fa fa-users fa-fw" aria-hidden="true"></i>
+                    <span>Group Chat</span></button>
+                <button id="private"><i class="fa fa-user fa-fw" aria-hidden="true"></i> <span>Private
+                        Chat</span></button>
+            </div>
+        </div>
+        <div class="content">
+            <div class="contact-profile">
+                <p class="text-center">361dm Faculty Group Chat</p>
+            </div>
+
+            <div class="messages">
+                <ul class="group-msg">
+                    <% chat.forEach(function(msg){ %>
+                    <li class="<% if(msg.sender_id==faculty.faculty_id || msg.receiver_id==faculty.faculty_id ){ %>replies<% } else {%> sent<% } %>">
+                        <p>
+                            <%
+                            if(msg.sender_id==faculty.faculty_id || msg.receiver_id==faculty.faculty_id){ %>
+                            <span class="replies-span">You: </span><%
+                            }
+                            else { %>
+                                <%= msg.facultyname %>
+
+                           <% }
+                            %>
+                            <%= msg.msg %>
+                        </p>
+                    </li>
+                    <% }) %>
+                </ul>
+            </div>
+            <div class="message-input">
+                <div class="wrap">
+                    <input autocomplete="off" autofocus="on" id="msg" class="inputMessage" name="msg" placeholder="type your message here..." />
+                    <input type="hidden" name="sender_id" id="sender_id" value="<%= faculty.faculty_id %>">
+                    <input type="hidden" name="receiver_id" id="receiver_id" value="0">
+                    <input type="hidden" name="chater" id="chater" value="<%= faculty.chater %>">
+                    <input type="hidden" name="messengername" id="messengername" value="<%= faculty.learner_faculty %>">
+                    <button class="submit" id="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script defer src='<%= rootpath %>/assets/js/script.js'></script>
+
+</body>
+
+</html>
